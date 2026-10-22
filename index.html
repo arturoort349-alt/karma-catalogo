@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Karma Candles · Catálogo</title>
+<meta name="description" content="Catálogo de velas artesanales Karma Candles. Arma tu pedido y envíalo por WhatsApp.">
+<meta name="theme-color" content="#17110e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Ctext y=%2226%22 font-size=%2226%22%3E%F0%9F%95%AF%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<meta property="og:title" content="Karma Candles · Catálogo">
+<meta property="og:image" content="img/oraculo_0.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+<style>
+:root{
+  --night:#17110e; --night2:#231a15; --wax:#f6eedf; --parch:#ecdfc6; --ink:#2a1d17; --muted:#7a6656;
+  --gold:#c99a4f; --gold2:#e7c27d; --wine:#7a2433; --flame:#ff9d3c; --ok:#25d366; --line:rgba(42,29,23,.12);
+  --r:18px; --sh:0 10px 30px -12px rgba(23,17,14,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',system-ui,sans-serif;background:var(--wax);color:var(--ink);min-height:100vh;overflow-x:hidden}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,textarea,select{font:inherit;color:inherit}
+img{display:block;max-width:100%}
+.serif{font-family:'Cormorant Garamond',serif}
+.script{font-family:'Allura',cursive}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky;top:0;z-index:40;background:rgba(23,17,14,.94);backdrop-filter:blur(10px);color:var(--wax);display:flex;align-items:center;gap:10px;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top))}
+.brand{display:flex;align-items:baseline;gap:6px;flex:1;min-width:0}
+.brand b{font:400 34px/1 'Allura',cursive;color:var(--gold2);white-space:nowrap}
+.brand span{font:600 11px/1 'Jost';letter-spacing:.28em;text-transform:uppercase;color:#cdbba3}
+.ibtn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.07);position:relative;transition:transform .2s,background .2s}
+.ibtn:active{transform:scale(.9)}
+.ibtn svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.badge{position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;border-radius:10px;background:var(--flame);color:var(--night);font:700 12px/20px 'Jost';text-align:center;padding:0 5px;transform:scale(0);transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.badge.on{transform:scale(1)}
+.bump{animation:bump .5s}
+@keyframes bump{30%{transform:scale(1.25) rotate(-8deg)}60%{transform:scale(.95)}}
+
+/* ---------- hero ---------- */
+.hero{background:radial-gradient(120% 90% at 50% 0%,#3a2617 0%,var(--night) 60%);color:var(--wax);padding:34px 16px 70px;text-align:center;position:relative;overflow:hidden}
+.flame{width:28px;height:42px;margin:0 auto 14px;position:relative}
+.flame i{position:absolute;inset:0;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(circle at 50% 70%,#fff4c2 0%,var(--flame) 45%,rgba(255,120,40,0) 72%);animation:flick 1.6s ease-in-out infinite alternate;transform-origin:50% 90%}
+.flame:after{content:"";position:absolute;left:50%;bottom:-6px;width:2px;height:10px;background:#3b2a20;transform:translateX(-50%)}
+@keyframes flick{0%{transform:scale(1,1) rotate(-2deg)}50%{transform:scale(.92,1.08) rotate(2deg)}100%{transform:scale(1.04,.95) rotate(-1deg)}}
+.hero h1{font:600 clamp(34px,9vw,58px)/1.02 'Cormorant Garamond',serif;letter-spacing:.01em}
+.hero h1 em{font-style:italic;color:var(--gold2)}
+.hero p{max-width:460px;margin:12px auto 0;color:#d9c9b2;font-size:16px;line-height:1.5}
+.steps{display:flex;justify-content:center;gap:8px;margin-top:22px;flex-wrap:wrap}
+.steps span{font:500 13px/1 'Jost';padding:9px 13px;border:1px solid rgba(231,194,125,.35);border-radius:999px;color:#ecdcc0}
+.steps b{color:var(--gold2);margin-right:4px}
+.glow{position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(255,157,60,.22),transparent 65%);left:50%;top:-60px;transform:translateX(-50%);pointer-events:none;animation:breath 4s ease-in-out infinite}
+@keyframes breath{50%{opacity:.6;transform:translateX(-50%) scale(1.1)}}
+
+/* ---------- tools ---------- */
+.tools{position:relative;z-index:5;margin:-34px 16px 0;background:#fffaf1;border-radius:var(--r);box-shadow:var(--sh);padding:12px}
+.search{display:flex;align-items:center;gap:8px;background:var(--wax);border-radius:12px;padding:0 12px}
+.search svg{width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:2}
+.search input{flex:1;border:0;background:none;padding:12px 0;outline:none;font-size:16px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:9px 15px;border-radius:999px;background:var(--wax);font:500 14px/1 'Jost';color:var(--muted);transition:all .25s}
+.chip.on{background:var(--night);color:var(--gold2)}
+
+/* ---------- grid ---------- */
+main{max-width:1100px;margin:0 auto;padding:20px 16px 120px}
+.sechead{display:flex;align-items:baseline;justify-content:space-between;margin:6px 2px 14px}
+.sechead h2{font:600 28px/1 'Cormorant Garamond',serif}
+.sechead small{color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media(min-width:720px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}}
+@media(min-width:1000px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.card{background:#fffaf1;border-radius:var(--r);overflow:hidden;box-shadow:0 2px 0 var(--line);display:flex;flex-direction:column;position:relative;opacity:0;transform:translateY(26px) scale(.98);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.card.in{opacity:1;transform:none}
+@media(hover:hover){.card:hover{box-shadow:var(--sh)}.card:hover .ph img{transform:scale(1.06)}}
+.ph{aspect-ratio:1;overflow:hidden;position:relative;background:var(--parch)}
+.ph img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.ph .tag{position:absolute;left:10px;top:10px;background:var(--wine);color:#fff;font:600 11px/1 'Jost';letter-spacing:.12em;text-transform:uppercase;padding:7px 9px;border-radius:8px}
+.ph .soldout{position:absolute;inset:0;background:rgba(23,17,14,.55);color:#fff;display:grid;place-items:center;font:600 14px/1 'Jost';letter-spacing:.2em;text-transform:uppercase}
+.ph .count{position:absolute;right:10px;bottom:10px;background:rgba(23,17,14,.65);color:#fff;font:500 11px/1 'Jost';padding:6px 8px;border-radius:8px;display:flex;gap:4px;align-items:center}
+.info{padding:12px 12px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.info h3{font:700 21px/1.05 'Cormorant Garamond',serif}
+.info .ph2{font:italic 500 15px/1.25 'Cormorant Garamond',serif;color:var(--muted)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding-top:10px}
+.price{font:600 17px/1 'Jost'}
+.price.ask{font:500 13px/1.2 'Jost';color:var(--muted)}
+.add{height:40px;min-width:40px;padding:0 12px;border-radius:999px;background:var(--night);color:var(--gold2);display:flex;align-items:center;gap:6px;font:600 14px/1 'Jost';transition:transform .2s,background .2s}
+.add:active{transform:scale(.92)}
+.add svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+.add.done{background:var(--ok);color:#fff}
+.empty{text-align:center;color:var(--muted);padding:50px 10px;grid-column:1/-1}
+
+/* edit mode on cards */
+.edit-tools{display:none;position:absolute;top:8px;right:8px;gap:6px;z-index:3}
+body.editing .edit-tools{display:flex}
+.etb{width:38px;height:38px;border-radius:50%;background:#fffaf1;box-shadow:0 4px 12px rgba(0,0,0,.25);display:grid;place-items:center}
+.etb svg{width:18px;height:18px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.etb.del svg{stroke:var(--wine)}
+.handle{cursor:grab;touch-action:none}
+body.editing .card{outline:2px dashed rgba(201,154,79,.6);outline-offset:-2px}
+.sortable-ghost{opacity:.35}
+.sortable-chosen{box-shadow:0 20px 40px -10px rgba(0,0,0,.45)!important;transform:scale(1.03)!important}
+.newcard{display:none;border:2px dashed var(--gold);border-radius:var(--r);min-height:220px;place-items:center;text-align:center;color:var(--gold);font:600 16px/1.3 'Jost';background:rgba(201,154,79,.07)}
+.newcard svg{width:40px;height:40px;stroke:currentColor;fill:none;stroke-width:1.6;margin:0 auto 8px}
+body.editing .newcard{display:grid}
+
+/* edit banner */
+.ebanner{display:none;position:sticky;top:62px;z-index:35;background:var(--gold);color:var(--night);padding:10px 16px;font:500 14px/1.35 'Jost';gap:10px;align-items:center;flex-wrap:wrap}
+body.editing .ebanner{display:flex}
+.ebanner b{flex:1;min-width:180px}
+.ebanner button{background:var(--night);color:var(--gold2);padding:9px 14px;border-radius:999px;font-weight:600;font-size:13px}
+.ebanner .ghost{background:rgba(23,17,14,.12);color:var(--night)}
+
+/* ---------- floating ---------- */
+.fab{position:fixed;left:16px;right:16px;bottom:max(16px,env(safe-area-inset-bottom));z-index:45;max-width:520px;margin:0 auto;background:var(--ok);color:#fff;border-radius:999px;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 22px;font:600 16px/1 'Jost';box-shadow:0 14px 30px -10px rgba(37,211,102,.6);transform:translateY(140%);transition:transform .45s cubic-bezier(.2,1.3,.4,1)}
+.fab.on{transform:none}
+.fab span:last-child{background:rgba(0,0,0,.18);border-radius:999px;padding:12px 16px}
+.pencil{position:fixed;right:16px;bottom:max(16px,env(safe-area-inset-bottom));z-index:44;height:46px;padding:0 16px;border-radius:999px;background:var(--night);color:var(--gold2);display:flex;align-items:center;gap:8px;font:600 14px/1 'Jost';box-shadow:var(--sh);transition:bottom .4s}
+.pencil svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+body.has-cart .pencil{bottom:calc(max(16px,env(safe-area-inset-bottom)) + 70px)}
+body.editing .pencil{display:none}
+
+/* ---------- sheets ---------- */
+.scrim{position:fixed;inset:0;background:rgba(23,17,14,.55);z-index:60;opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;background:#fffaf1;border-radius:24px 24px 0 0;max-height:92vh;overflow:auto;transform:translateY(105%);transition:transform .45s cubic-bezier(.2,.9,.2,1);padding-bottom:max(20px,env(safe-area-inset-bottom))}
+.sheet.on{transform:none}
+@media(min-width:720px){.sheet{left:50%;right:auto;width:560px;bottom:auto;top:50%;border-radius:24px;transform:translate(-50%,-40%) scale(.96);opacity:0;pointer-events:none;transition:all .35s cubic-bezier(.2,.9,.2,1)}.sheet.on{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}}
+.grab{width:44px;height:5px;border-radius:3px;background:var(--line);margin:10px auto 0}
+.shead{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 6px}
+.shead h3{font:700 26px/1.1 'Cormorant Garamond',serif}
+.x{width:38px;height:38px;border-radius:50%;background:var(--wax);display:grid;place-items:center}
+.x svg{width:16px;height:16px;stroke:var(--ink);stroke-width:2.2;fill:none;stroke-linecap:round}
+.spad{padding:6px 18px 10px}
+
+/* product sheet */
+.gal{position:relative;margin:0 18px;border-radius:18px;overflow:hidden;background:var(--parch)}
+.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.track img{flex:none;width:100%;aspect-ratio:1;object-fit:cover;scroll-snap-align:center}
+.dots{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:6px}
+.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);transition:all .3s}
+.dots i.on{background:#fff;width:20px;border-radius:4px}
+.thumbs{display:flex;gap:8px;padding:10px 18px 0;overflow-x:auto}
+.thumbs img{width:58px;height:58px;border-radius:10px;object-fit:cover;opacity:.55;border:2px solid transparent;flex:none;transition:all .25s}
+.thumbs img.on{opacity:1;border-color:var(--gold)}
+.pdesc{font-size:15px;line-height:1.55;color:#4d3d32;margin-top:8px;white-space:pre-line}
+.pphrase{font:italic 500 19px/1.3 'Cormorant Garamond',serif;color:var(--wine)}
+.qty{display:flex;align-items:center;gap:4px;background:var(--wax);border-radius:999px;padding:4px}
+.qty button{width:36px;height:36px;border-radius:50%;background:#fffaf1;font:600 20px/1 'Jost';box-shadow:0 1px 0 var(--line)}
+.qty span{min-width:28px;text-align:center;font-weight:600}
+.big{width:100%;height:54px;border-radius:999px;background:var(--night);color:var(--gold2);font:600 16px/1 'Jost';margin-top:16px;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .2s}
+.big:active{transform:scale(.97)}
+.big.wa{background:var(--ok);color:#fff}
+.big svg{width:22px;height:22px}
+
+/* cart */
+.citem{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.citem img{width:62px;height:62px;border-radius:12px;object-fit:cover}
+.citem div{flex:1;min-width:0}
+.citem b{font:700 18px/1.1 'Cormorant Garamond',serif;display:block}
+.citem small{color:var(--muted)}
+.tot{display:flex;justify-content:space-between;padding:14px 0 4px;font:600 18px/1 'Jost'}
+.field{display:block;margin-top:12px}
+.field span{display:block;font:500 13px/1 'Jost';color:var(--muted);margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;font-size:16px;outline:none}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold)}
+.seg{display:flex;background:var(--wax);border-radius:12px;padding:4px;gap:4px}
+.seg button{flex:1;padding:11px;border-radius:9px;font-weight:500;color:var(--muted)}
+.seg button.on{background:#fffaf1;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+/* editor */
+.ephotos{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.ephoto{width:78px;height:78px;border-radius:12px;overflow:hidden;position:relative;background:var(--parch)}
+.ephoto img{width:100%;height:100%;object-fit:cover}
+.ephoto button{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:rgba(23,17,14,.75);color:#fff;font:600 14px/24px 'Jost'}
+.ephoto .main{position:absolute;left:4px;bottom:4px;background:var(--gold);color:var(--night);font:600 10px/1 'Jost';padding:4px 5px;border-radius:5px}
+.addph{width:78px;height:78px;border-radius:12px;border:2px dashed var(--gold);color:var(--gold);display:grid;place-items:center;text-align:center;font:600 11px/1.2 'Jost'}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.switch{display:flex;align-items:center;justify-content:space-between;margin-top:14px;font-weight:500}
+.switch input{width:50px;height:28px;appearance:none;background:#d6c9b5;border-radius:14px;position:relative;transition:background .25s}
+.switch input:after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .25s}
+.switch input:checked{background:var(--ok)}
+.switch input:checked:after{transform:translateX(22px)}
+.hint{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.4}
+.danger{color:var(--wine);font-weight:600;margin-top:14px;padding:10px 0;width:100%}
+
+.wab{position:fixed;left:16px;bottom:max(16px,env(safe-area-inset-bottom));z-index:44;width:54px;height:54px;border-radius:50%;background:var(--ok);display:grid;place-items:center;box-shadow:0 10px 24px -8px rgba(37,211,102,.7);transition:bottom .4s;animation:wapulse 2.6s infinite}
+.wab svg{width:28px;height:28px}
+@keyframes wapulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.55)}70%{box-shadow:0 0 0 16px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
+body.has-cart .wab{bottom:calc(max(16px,env(safe-area-inset-bottom)) + 70px)}
+body.editing .wab{display:none}
+.toast{position:fixed;left:50%;top:76px;z-index:80;transform:translate(-50%,-20px);opacity:0;background:var(--night);color:var(--wax);padding:12px 18px;border-radius:999px;font:500 14px/1 'Jost';transition:all .35s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:10px 16px 110px}
+footer b{font:400 30px/1 'Allura',cursive;color:var(--gold);display:block}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.card{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="brand"><b id="bName">Karma Candles</b><span>Catálogo</span></div>
+  <button class="ibtn" id="cartBtn" aria-label="Ver mi pedido">
+    <svg viewBox="0 0 24 24"><path d="M5 7h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+    <span class="badge" id="badge">0</span>
+  </button>
+</header>
+
+<div class="ebanner">
+  <b>✏️ Modo editar<br><small style="font-weight:400">Toca ✎ para cambiar, 🗑 para borrar, ✥ y arrastra para mover.</small></b>
+  <button class="ghost" id="setBtn">Ajustes</button>
+  <button id="doneBtn">Listo</button>
+</div>
+
+<section class="hero">
+  <div class="glow"></div>
+  <div class="flame"><i></i></div>
+  <h1 id="hTitle">Velas hechas a mano,<br><em>con intención</em></h1>
+  <p id="hSub">Elige tus velas, arma tu pedido y nos llega directo por WhatsApp.</p>
+  <div class="steps"><span><b>1</b>Elige</span><span><b>2</b>Agrega</span><span><b>3</b>Pide por WhatsApp</span></div>
+</section>
+
+<div class="tools">
+  <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar vela…" autocomplete="off"></label>
+  <div class="chips" id="chips"></div>
+</div>
+
+<main>
+  <div class="sechead"><h2 id="secTitle">Todas las velas</h2><small id="secCount"></small></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer><b id="fName">Karma Candles</b>Velas y talleres · Puebla<br>Pedidos por WhatsApp</footer>
+
+<button class="pencil" id="editBtn"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/></svg>Editar catálogo</button>
+<a class="wab" id="wab" href="#" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></a>
+<button class="fab" id="fab"><span>Ver mi pedido</span><span id="fabTot">$0</span></button>
+
+<div class="scrim" id="scrim"></div>
+
+<!-- product -->
+<div class="sheet" id="pSheet" role="dialog" aria-modal="true">
+  <div class="grab"></div>
+  <div class="shead"><h3 id="pName"></h3><button class="x" data-close><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="gal"><div class="track" id="pTrack"></div><div class="dots" id="pDots"></div></div>
+  <div class="thumbs" id="pThumbs"></div>
+  <div class="spad">
+    <div class="pphrase" id="pPhrase"></div>
+    <div class="pdesc" id="pDesc"></div>
+    <div class="row" style="padding-top:16px"><span class="price" id="pPrice"></span><div class="qty"><button id="qMinus" aria-label="menos">−</button><span id="qVal">1</span><button id="qPlus" aria-label="más">+</button></div></div>
+    <button class="big" id="pAdd">Agregar a mi pedido</button>
+  </div>
+</div>
+
+<!-- cart -->
+<div class="sheet" id="cSheet" role="dialog" aria-modal="true">
+  <div class="grab"></div>
+  <div class="shead"><h3>Mi pedido</h3><button class="x" data-close><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="spad">
+    <div id="cList"></div>
+    <div class="tot"><span>Total</span><span id="cTot"></span></div>
+    <label class="field"><span>Tu nombre</span><input id="cNameIn" autocomplete="name" placeholder="¿A nombre de quién?"></label>
+    <div class="field"><span>Entrega</span><div class="seg" id="cDel"><button class="on" data-v="Paso a recoger">Paso a recoger</button><button data-v="Envío a domicilio">Envío</button></div></div>
+    <label class="field"><span>Notas (opcional)</span><textarea id="cNote" rows="2" placeholder="Ej. es para regalo, color favorito…"></textarea></label>
+    <button class="big wa" id="sendWa"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>Enviar pedido por WhatsApp</button>
+    <p class="hint" style="text-align:center">Se abre WhatsApp con tu pedido ya escrito. Sin comisiones.</p>
+  </div>
+</div>
+
+<!-- editor -->
+<div class="sheet" id="eSheet" role="dialog" aria-modal="true">
+  <div class="grab"></div>
+  <div class="shead"><h3 id="eTitle">Nueva vela</h3><button class="x" data-close><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="spad">
+    <div class="field"><span>Fotos (la primera es la portada · toca una para hacerla portada)</span><div class="ephotos" id="ePhotos"></div></div>
+    <input type="file" id="eFile" accept="image/*" multiple hidden>
+    <label class="field"><span>Nombre</span><input id="eName" placeholder="Ej. Oráculo II"></label>
+    <label class="field"><span>Frase corta</span><input id="ePhrase" placeholder="Ej. Algunas respuestas llegan con el tiempo."></label>
+    <div class="two">
+      <label class="field"><span>Precio (MXN)</span><input id="ePrice" type="number" inputmode="decimal" min="0" placeholder="Vacío = consultar"></label>
+      <label class="field"><span>Categoría</span><input id="eCat" list="catList" placeholder="Ej. Colección"></label>
+    </div>
+    <datalist id="catList"></datalist>
+    <label class="field"><span>Etiqueta (opcional)</span><input id="eTag" placeholder="Ej. Nuevo, Edición limitada"></label>
+    <label class="field"><span>Descripción</span><textarea id="eDesc" rows="3" placeholder="Aroma, tamaño, piedras, duración…"></textarea></label>
+    <label class="switch">Disponible<input type="checkbox" id="eAvail" checked></label>
+    <button class="big" id="eSave">Guardar vela</button>
+    <button class="danger" id="eDel">Borrar esta vela</button>
+  </div>
+</div>
+
+<!-- settings -->
+<div class="sheet" id="sSheet" role="dialog" aria-modal="true">
+  <div class="grab"></div>
+  <div class="shead"><h3>Ajustes</h3><button class="x" data-close><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="spad">
+    <label class="field"><span>Nombre de la marca</span><input id="sName"></label>
+    <label class="field"><span>WhatsApp donde llegan los pedidos (10 dígitos)</span><input id="sWa" inputmode="tel" placeholder="Ej. 2221234567"></label>
+    <p class="hint">Si lo dejas vacío, WhatsApp te deja elegir a quién mandar el pedido.</p>
+    <label class="field"><span>Título de portada</span><input id="sTitle"></label>
+    <label class="field"><span>Texto de portada</span><input id="sSub"></label>
+    <button class="big" id="sSave">Guardar ajustes</button>
+    <div class="two" style="margin-top:10px">
+      <button class="big" style="background:var(--wax);color:var(--ink);margin-top:0" id="sExport">Respaldar</button>
+      <button class="big" style="background:var(--wax);color:var(--ink);margin-top:0" id="sImport">Cargar respaldo</button>
+    </div>
+    <input type="file" id="sFile" accept="application/json" hidden>
+    <button class="danger" id="sReset">Volver al catálogo de ejemplo</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DEFAULT={
+  settings:{name:'Karma Candles',wa:'',title:'Velas hechas a mano,<br><em>con intención</em>',sub:'Elige tus velas, arma tu pedido y nos llega directo por WhatsApp.'},
+  products:[
+    {id:'p1',name:'Oráculo II',phrase:'Algunas respuestas llegan con el tiempo.',desc:'Vela en lata negra con calaveritas de cera.\nEnciende. Espera. Hay un mensaje esperando por ti.',price:280,cat:'Colección Mística',tag:'Nuevo',avail:true,photos:['img/oraculo_0.jpg','img/oraculo_1.jpg','img/oraculo_2.jpg','img/oraculo_3.jpg']},
+    {id:'p2',name:'Metamorfosis I · Verde',phrase:'Hay fuegos que no consumen. Transforman.',desc:'Vela verde con calavera y flor negra de cera, cuarzos y mecha de madera.\nEnciende, observa, deja que suceda.',price:320,cat:'Colección Mística',tag:'',avail:true,photos:['img/meta_verde_0.jpg','img/meta_verde_1.jpg','img/meta_verde_2.jpg','img/meta_verde_3.jpg']},
+    {id:'p3',name:'Metamorfosis I · Lila',phrase:'Hay fuegos que no consumen. Transforman.',desc:'Vela lila de doble mecha con calavera y flor negra de cera y amatistas.\nEnciende, observa, deja que suceda.',price:350,cat:'Colección Mística',tag:'',avail:true,photos:['img/meta_lila_0.jpg','img/meta_lila_1.jpg','img/meta_lila_2.jpg','img/meta_lila_3.jpg']},
+    {id:'p4',name:'Cempasúchil',phrase:'Para iluminar el camino de los que regresan.',desc:'Flor de cempasúchil de cera en vaso de vidrio, con listón de cuadros y moño.',price:250,cat:'Día de Muertos',tag:'Temporada',avail:true,photos:['img/cempasuchil_0.jpg','img/cempasuchil_1.jpg','img/cempasuchil_2.jpg','img/cempasuchil_3.jpg']}
+  ]
+};
+const KEY='karma-catalogo-v1';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money=n=>'$'+Number(n).toLocaleString('es-MX',{maximumFractionDigits:2});
+let DB, cart={}, cat='Todas', query='', current=null, qty=1, editing=null, draftPhotos=[];
+
+/* ---------- storage (IndexedDB, fotos incluidas) ---------- */
+const idb=(()=>{let p;function open(){return p||(p=new Promise((res,rej)=>{const r=indexedDB.open('karma',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}))}
+ return{async get(k){try{const d=await open();return await new Promise(r=>{const q=d.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>r(q.result);q.onerror=()=>r(null)})}catch(e){return null}},
+        async set(k,v){try{const d=await open();await new Promise(r=>{const t=d.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=r;t.onerror=r})}catch(e){}}}})();
+async function load(){const d=await idb.get(KEY);DB=d&&d.products?d:structuredClone(DEFAULT);try{cart=JSON.parse(localStorage.getItem(KEY+'-cart')||'{}')}catch(e){cart={}}}
+const save=()=>idb.set(KEY,DB);
+const saveCart=()=>{try{localStorage.setItem(KEY+'-cart',JSON.stringify(cart))}catch(e){}};
+
+/* ---------- render ---------- */
+function cats(){return['Todas',...new Set(DB.products.map(p=>p.cat).filter(Boolean))]}
+function renderChips(){const c=cats();if(!c.includes(cat))cat='Todas';
+ $('#chips').innerHTML=c.map(x=>`<button class="chip${x===cat?' on':''}" data-cat="${esc(x)}">${esc(x)}</button>`).join('');
+ $('#catList').innerHTML=c.slice(1).map(x=>`<option value="${esc(x)}">`).join('')}
+function visible(){const q=query.trim().toLowerCase();return DB.products.filter(p=>(cat==='Todas'||p.cat===cat)&&(!q||(p.name+' '+p.phrase+' '+p.desc+' '+p.cat).toLowerCase().includes(q)))}
+const IC={edit:'<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/></svg>',del:'<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>',move:'<svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg>',plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>'};
+function renderGrid(){
+ const list=visible();const isEdit=document.body.classList.contains('editing');
+ $('#secTitle').textContent=cat==='Todas'?'Todas las velas':cat;
+ $('#secCount').textContent=list.length+(list.length===1?' vela':' velas');
+ $('#grid').innerHTML=list.map(p=>`
+  <article class="card" data-id="${p.id}">
+   <div class="edit-tools"><button class="etb handle" aria-label="Mover">${IC.move}</button><button class="etb" data-edit="${p.id}" aria-label="Editar">${IC.edit}</button><button class="etb del" data-del="${p.id}" aria-label="Borrar">${IC.del}</button></div>
+   <div class="ph" data-open="${p.id}">${p.photos[0]?`<img src="${esc(p.photos[0])}" alt="${esc(p.name)}" loading="lazy">`:''}
+    ${p.tag?`<span class="tag">${esc(p.tag)}</span>`:''}${!p.avail?'<span class="soldout">Agotada</span>':''}
+    ${p.photos.length>1?`<span class="count">📷 ${p.photos.length}</span>`:''}</div>
+   <div class="info" data-open="${p.id}"><h3>${esc(p.name)}</h3><div class="ph2">${esc(p.phrase)}</div>
+    <div class="row"><span class="price${p.price==null?' ask':''}">${p.price==null?'Precio a consultar':money(p.price)}</span>
+     ${p.avail?`<button class="add" data-add="${p.id}" aria-label="Agregar">${IC.plus}</button>`:''}</div></div>
+  </article>`).join('')+(isEdit?`<button class="newcard" id="newCard"><div>${IC.plus}Agregar vela</div></button>`:'')+(!list.length&&!isEdit?'<p class="empty">No encontramos velas con esa búsqueda.</p>':'');
+ reveal();setupSort();
+}
+let io;function reveal(){io&&io.disconnect();io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
+ document.querySelectorAll('.card').forEach((c,i)=>{c.style.transitionDelay=(i%4)*70+'ms';io.observe(c)})}
+let sortable;function setupSort(){sortable&&sortable.destroy();sortable=null;
+ if(!document.body.classList.contains('editing')||!window.Sortable)return;
+ sortable=new Sortable($('#grid'),{handle:'.handle',draggable:'.card',animation:220,onEnd(){
+   const ids=[...document.querySelectorAll('#grid .card')].map(c=>c.dataset.id);
+   const shown=new Set(ids);const rest=DB.products.filter(p=>!shown.has(p.id));
+   const byId=Object.fromEntries(DB.products.map(p=>[p.id,p]));
+   // reacomoda solo las visibles respetando el lugar de las ocultas
+   const out=[];let k=0;DB.products.forEach(p=>{out.push(shown.has(p.id)?byId[ids[k++]]:p)});
+   DB.products=out;save();toast('Orden guardado')}})}
+function waNum(){const w=(DB.settings.wa||'').replace(/\D/g,'');return w?(w.length===10?'52'+w:w):''}
+function renderSettings(){const s=DB.settings;$('#wab').href=`https://wa.me/${waNum()}?text=${encodeURIComponent('Hola '+s.name+' ✨ quiero información de sus velas')}`;$('#bName').textContent=s.name;$('#fName').textContent=s.name;document.title=s.name+' · Catálogo';$('#hTitle').innerHTML=s.title;$('#hSub').textContent=s.sub}
+
+/* ---------- cart ---------- */
+function cartItems(){return Object.entries(cart).map(([id,n])=>({p:DB.products.find(x=>x.id===id),n})).filter(x=>x.p&&x.n>0)}
+function updateCart(bump){const it=cartItems();const n=it.reduce((a,b)=>a+b.n,0);const tot=it.reduce((a,b)=>a+(b.p.price||0)*b.n,0);const ask=it.some(x=>x.p.price==null);
+ const b=$('#badge');b.textContent=n;b.classList.toggle('on',n>0);
+ $('#fab').classList.toggle('on',n>0&&!document.body.classList.contains('editing'));document.body.classList.toggle('has-cart',n>0);
+ $('#fabTot').textContent=n+(n===1?' vela':' velas')+(tot?' · '+money(tot):'');
+ if(bump){const c=$('#cartBtn');c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump')}
+ $('#cList').innerHTML=it.length?it.map(({p,n})=>`<div class="citem"><img src="${esc(p.photos[0]||'')}" alt=""><div><b>${esc(p.name)}</b><small>${p.price==null?'Precio a consultar':money(p.price)+' c/u'}</small></div><div class="qty" style="flex:none"><button data-cq="${p.id}" data-d="-1">−</button><span>${n}</span><button data-cq="${p.id}" data-d="1">+</button></div></div>`).join(''):'<p class="empty" style="padding:24px 0">Tu pedido está vacío.</p>';
+ $('#cTot').textContent=tot?money(tot)+(ask?' + por consultar':''):(ask?'Por consultar':'$0');
+ saveCart()}
+function addToCart(id,n=1,fromEl){cart[id]=(cart[id]||0)+n;updateCart(true);const p=DB.products.find(x=>x.id===id);toast(`✓ ${p.name} agregada`);
+ if(fromEl){fromEl.classList.add('done');fromEl.innerHTML='✓';setTimeout(()=>{fromEl.classList.remove('done');fromEl.innerHTML=IC.plus},1100)}}
+function sendWa(){const it=cartItems();if(!it.length)return toast('Agrega al menos una vela');
+ const name=$('#cNameIn').value.trim();const del=$('#cDel .on').dataset.v;const note=$('#cNote').value.trim();
+ const tot=it.reduce((a,b)=>a+(b.p.price||0)*b.n,0);
+ let m=`Hola ${DB.settings.name} ✨ quiero hacer un pedido:\n\n`+it.map(({p,n})=>`• ${n} × ${p.name}${p.price!=null?' — '+money(p.price*n):''}`).join('\n');
+ if(tot)m+=`\n\nTotal: ${money(tot)}${it.some(x=>x.p.price==null)?' + precios por confirmar':''}`;
+ m+=`\nEntrega: ${del}`;if(name)m+=`\nNombre: ${name}`;if(note)m+=`\nNotas: ${note}`;
+ const num=waNum();
+ window.open(`https://wa.me/${num}?text=${encodeURIComponent(m)}`,'_blank')}
+
+/* ---------- sheets ---------- */
+let openSheet=null;
+function show(id){openSheet&&openSheet.classList.remove('on');openSheet=$(id);openSheet.classList.add('on');$('#scrim').classList.add('on');document.body.style.overflow='hidden'}
+function hide(){openSheet&&openSheet.classList.remove('on');openSheet=null;$('#scrim').classList.remove('on');document.body.style.overflow=''}
+function openProduct(id){const p=DB.products.find(x=>x.id===id);if(!p)return;current=p;qty=1;$('#qVal').textContent=1;
+ $('#pName').textContent=p.name;$('#pPhrase').textContent=p.phrase;$('#pDesc').textContent=p.desc;
+ $('#pPrice').textContent=p.price==null?'Precio a consultar':money(p.price);$('#pPrice').className='price'+(p.price==null?' ask':'');
+ $('#pTrack').innerHTML=p.photos.map(s=>`<img src="${esc(s)}" alt="${esc(p.name)}">`).join('');
+ $('#pDots').innerHTML=p.photos.length>1?p.photos.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join(''):'';
+ $('#pThumbs').innerHTML=p.photos.length>1?p.photos.map((s,i)=>`<img src="${esc(s)}" data-i="${i}" class="${i?'':'on'}" alt="">`).join(''):'';
+ $('#pThumbs').style.display=p.photos.length>1?'':'none';
+ const a=$('#pAdd');a.disabled=!p.avail;a.textContent=p.avail?'Agregar a mi pedido':'Agotada por ahora';a.style.opacity=p.avail?1:.5;
+ $('#pTrack').scrollLeft=0;show('#pSheet')}
+$('#pTrack').addEventListener('scroll',()=>{const t=$('#pTrack');const i=Math.round(t.scrollLeft/t.clientWidth);document.querySelectorAll('#pDots i').forEach((d,k)=>d.classList.toggle('on',k===i));document.querySelectorAll('#pThumbs img').forEach((d,k)=>d.classList.toggle('on',k===i))},{passive:true});
+$('#pThumbs').addEventListener('click',e=>{const i=e.target.dataset.i;if(i!=null){const t=$('#pTrack');t.scrollTo({left:t.clientWidth*i,behavior:'smooth'})}});
+$('#qMinus').onclick=()=>{qty=Math.max(1,qty-1);$('#qVal').textContent=qty};
+$('#qPlus').onclick=()=>{qty++;$('#qVal').textContent=qty};
+$('#pAdd').onclick=()=>{if(!current||!current.avail)return;addToCart(current.id,qty);hide()};
+
+/* ---------- editor ---------- */
+function setEditing(on){document.body.classList.toggle('editing',on);renderGrid();updateCart()}
+function openEditor(id){editing=id?DB.products.find(p=>p.id===id):null;const p=editing||{name:'',phrase:'',desc:'',price:null,cat:cat!=='Todas'?cat:'',tag:'',avail:true,photos:[]};
+ $('#eTitle').textContent=editing?'Editar vela':'Nueva vela';$('#eName').value=p.name;$('#ePhrase').value=p.phrase;$('#eDesc').value=p.desc;
+ $('#ePrice').value=p.price??'';$('#eCat').value=p.cat;$('#eTag').value=p.tag;$('#eAvail').checked=p.avail;$('#eDel').style.display=editing?'':'none';
+ draftPhotos=[...p.photos];renderDraft();show('#eSheet')}
+function renderDraft(){$('#ePhotos').innerHTML=draftPhotos.map((s,i)=>`<div class="ephoto" data-main="${i}"><img src="${esc(s)}" alt="">${i===0?'<span class="main">Portada</span>':''}<button data-rm="${i}" aria-label="Quitar foto">×</button></div>`).join('')+`<button class="addph" id="addPh">＋<br>Agregar<br>fotos</button>`;
+ if(window.Sortable){Sortable.create($('#ePhotos'),{draggable:'.ephoto',animation:180,onEnd(e){const [m]=draftPhotos.splice(e.oldIndex,1);draftPhotos.splice(e.newIndex,0,m);renderDraft()}})}}
+$('#ePhotos').addEventListener('click',e=>{const rm=e.target.closest('[data-rm]');if(rm){draftPhotos.splice(+rm.dataset.rm,1);return renderDraft()}
+ if(e.target.closest('#addPh'))return $('#eFile').click();
+ const mn=e.target.closest('[data-main]');if(mn&&+mn.dataset.main>0){const [m]=draftPhotos.splice(+mn.dataset.main,1);draftPhotos.unshift(m);renderDraft();toast('Portada cambiada')}});
+function shrink(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const M=900,sc=Math.min(1,M/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.82))};im.onerror=()=>res(null);im.src=r.result};r.readAsDataURL(file)})}
+$('#eFile').onchange=async e=>{for(const f of e.target.files){const d=await shrink(f);d&&draftPhotos.push(d)}e.target.value='';renderDraft()};
+$('#eSave').onclick=()=>{const name=$('#eName').value.trim();if(!name)return toast('Ponle nombre a la vela');
+ const pr=$('#ePrice').value.trim();const data={name,phrase:$('#ePhrase').value.trim(),desc:$('#eDesc').value.trim(),price:pr===''?null:Math.max(0,+pr),cat:$('#eCat').value.trim(),tag:$('#eTag').value.trim(),avail:$('#eAvail').checked,photos:draftPhotos};
+ if(editing)Object.assign(editing,data);else DB.products.unshift({id:'p'+Date.now().toString(36),...data});
+ save();hide();renderChips();renderGrid();updateCart();toast(editing?'Cambios guardados':'Vela agregada')};
+function delProduct(id){const p=DB.products.find(x=>x.id===id);if(!p)return;if(!confirm(`¿Borrar "${p.name}" del catálogo?`))return;
+ DB.products=DB.products.filter(x=>x.id!==id);delete cart[id];save();hide();renderChips();renderGrid();updateCart();toast('Vela borrada')}
+$('#eDel').onclick=()=>editing&&delProduct(editing.id);
+
+/* ---------- settings ---------- */
+function openSettings(){const s=DB.settings;$('#sName').value=s.name;$('#sWa').value=s.wa;$('#sTitle').value=s.title.replace(/<br>/g,' / ').replace(/<\/?em>/g,'');$('#sSub').value=s.sub;show('#sSheet')}
+$('#sSave').onclick=()=>{const t=$('#sTitle').value.trim();const parts=t.split(' / ');
+ DB.settings={name:$('#sName').value.trim()||'Mi tienda',wa:$('#sWa').value.trim(),title:parts.length>1?esc(parts[0])+'<br><em>'+esc(parts.slice(1).join(' '))+'</em>':esc(t),sub:$('#sSub').value.trim()};
+ save();renderSettings();hide();toast('Ajustes guardados')};
+$('#sExport').onclick=()=>{const b=new Blob([JSON.stringify(DB)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='catalogo-respaldo.json';a.click()};
+$('#sImport').onclick=()=>$('#sFile').click();
+$('#sFile').onchange=async e=>{try{const d=JSON.parse(await e.target.files[0].text());if(!d.products)throw 0;DB=d;save();renderSettings();renderChips();renderGrid();updateCart();hide();toast('Respaldo cargado')}catch(err){toast('Ese archivo no es un respaldo')}e.target.value=''};
+$('#sReset').onclick=()=>{if(!confirm('¿Volver al catálogo de ejemplo? Se pierden tus cambios.'))return;DB=structuredClone(DEFAULT);save();renderSettings();renderChips();renderGrid();updateCart();hide();toast('Catálogo de ejemplo')};
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+ const t=e.target;
+ if(t.closest('[data-close]')||t.id==='scrim')return hide();
+ const ch=t.closest('[data-cat]');if(ch){cat=ch.dataset.cat;renderChips();renderGrid();return}
+ const ad=t.closest('[data-add]');if(ad){e.stopPropagation();return addToCart(ad.dataset.add,1,ad)}
+ const ed=t.closest('[data-edit]');if(ed)return openEditor(ed.dataset.edit);
+ const dl=t.closest('[data-del]');if(dl)return delProduct(dl.dataset.del);
+ if(t.closest('#newCard'))return openEditor(null);
+ const cq=t.closest('[data-cq]');if(cq){const id=cq.dataset.cq;cart[id]=Math.max(0,(cart[id]||0)+(+cq.dataset.d));if(!cart[id])delete cart[id];return updateCart()}
+ const op=t.closest('[data-open]');if(op&&!document.body.classList.contains('editing'))return openProduct(op.dataset.open);
+ if(op)return openEditor(op.dataset.open);
+});
+$('#cartBtn').onclick=$('#fab').onclick=()=>{updateCart();show('#cSheet')};
+$('#sendWa').onclick=sendWa;
+$('#cDel').onclick=e=>{const b=e.target.closest('button');if(!b)return;$('#cDel .on').classList.remove('on');b.classList.add('on')};
+$('#q').oninput=e=>{query=e.target.value;renderGrid()};
+$('#editBtn').onclick=()=>{setEditing(true);toast('Modo editar activado');window.scrollTo({top:$('main').offsetTop-140,behavior:'smooth'})};
+$('#doneBtn').onclick=()=>{setEditing(false);toast('¡Listo! Así lo ven tus clientes')};
+$('#setBtn').onclick=openSettings;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
+// deslizar hacia abajo para cerrar en celular
+(()=>{let y0=null,sh=null;document.addEventListener('touchstart',e=>{const s=e.target.closest('.sheet');if(s&&s.scrollTop<=0&&e.target.closest('.grab,.shead')){y0=e.touches[0].clientY;sh=s}},{passive:true});
+ document.addEventListener('touchmove',e=>{if(y0==null)return;const d=Math.max(0,e.touches[0].clientY-y0);sh.style.transition='none';sh.style.transform=`translateY(${d}px)`},{passive:true});
+ document.addEventListener('touchend',e=>{if(y0==null)return;const d=e.changedTouches[0].clientY-y0;sh.style.transition='';sh.style.transform='';if(d>90)hide();y0=null})})();
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),1800)}
+
+load().then(()=>{renderSettings();renderChips();renderGrid();updateCart()});
+</script>
+</body>
+</html>
