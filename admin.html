@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Admin · Karma Candles</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f4eae3">
+<link rel="icon" href="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+<style>
+:root{--brand:#7d5a44;--brand2:#8f6a52;--bg:#f4eae3;--parch:#eadbd1;--ink:#4a372c;--muted:#8e7565;--accent:#b07563;--ok:#3f8f5a;--line:rgba(125,90,68,.16);--card:#fffbf8;--sh:0 14px 34px -16px rgba(125,90,68,.4)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Jost',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,textarea{font:inherit;color:inherit}
+img{display:block;max-width:100%}
+h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:600}
+
+/* login */
+.login{min-height:100vh;display:grid;place-items:center;padding:24px 16px}
+.lcard{width:min(100%,380px);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:32px 24px;text-align:center;box-shadow:var(--sh)}
+.lcard img{width:170px;margin:0 auto 10px}
+.lcard h1{font-size:26px;margin-bottom:4px}
+.lcard p{color:var(--muted);font-size:14px;margin-bottom:20px}
+.pw{position:relative}
+.pw input{width:100%;padding:14px 48px 14px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:16px;outline:none}
+.pw input:focus{border-color:var(--brand)}
+.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;color:var(--muted)}
+.pw svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8}
+.err{color:var(--accent);font-size:14px;min-height:20px;margin-top:10px}
+.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 20px;border-radius:999px;background:var(--brand);color:#fbf6f2;font-weight:500;font-size:15px;transition:background .2s,transform .15s}
+.btn:hover{background:var(--brand2)}
+.btn:active{transform:scale(.97)}
+.btn.full{width:100%;margin-top:14px}
+.btn.ghost{background:transparent;color:var(--brand);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--parch)}
+.btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+
+/* panel */
+.top{position:sticky;top:0;z-index:20;background:rgba(244,234,227,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 16px}
+.top img{height:42px}
+.top .t{flex:1;min-width:0}
+.top .t b{display:block;font:600 18px/1.1 'Cormorant Garamond',serif}
+.top .t span{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.top a,.top button{font-size:13px;color:var(--brand);font-weight:500;padding:8px 10px;border-radius:999px;text-decoration:none}
+.top a:hover,.top button:hover{background:var(--parch)}
+.wrap{max-width:860px;margin:0 auto;padding:18px 16px 60px}
+.tabs{display:flex;gap:6px;background:var(--parch);padding:4px;border-radius:12px;margin-bottom:18px}
+.tabs button{flex:1;padding:11px;border-radius:9px;font-weight:500;color:var(--muted)}
+.tabs button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.stat b{display:block;font:600 26px/1 'Cormorant Garamond',serif}
+.stat span{font-size:12px;color:var(--muted)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.bar h2{font-size:26px}
+.hint{font-size:13px;color:var(--muted);margin:-4px 0 12px}
+
+.list{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px}
+.row .h{cursor:grab;touch-action:none;color:var(--muted);padding:6px 2px}
+.row .h svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+.row img{width:58px;height:58px;border-radius:10px;object-fit:cover;background:var(--parch);flex:none}
+.row .i{flex:1;min-width:0}
+.row .i b{display:block;font:600 18px/1.15 'Cormorant Garamond',serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .i small{color:var(--muted);font-size:13px}
+.row .p{font-weight:600;font-size:15px;white-space:nowrap}
+.row .a{display:flex;gap:4px}
+.ib{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:var(--brand)}
+.ib:hover{background:var(--parch)}
+.ib.del{color:var(--accent)}
+.ib svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.row.off{opacity:.55}
+.pill{display:inline-block;font-size:11px;padding:3px 8px;border-radius:999px;background:var(--parch);color:var(--brand);margin-left:4px;vertical-align:middle}
+.sortable-ghost{opacity:.3}
+@media(max-width:560px){.row .p{display:none}.stats{grid-template-columns:repeat(3,1fr)}.stat b{font-size:22px}}
+.empty{text-align:center;color:var(--muted);padding:40px 10px;background:var(--card);border:1px dashed var(--line);border-radius:14px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.field{display:block;margin-top:12px}
+.field:first-child{margin-top:0}
+.field span{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.field input,.field textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;font-size:16px;outline:none}
+.field input:focus,.field textarea:focus{border-color:var(--brand)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.small{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.45}
+.sep{height:1px;background:var(--line);margin:18px 0}
+.danger{color:var(--accent);font-weight:500;font-size:14px;padding:10px 0}
+
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(63,49,41,.45);z-index:60;opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.on{opacity:1;pointer-events:auto}
+.modal{position:fixed;left:0;right:0;bottom:0;z-index:61;background:var(--card);border-radius:22px 22px 0 0;max-height:92vh;overflow:auto;transform:translateY(105%);transition:transform .4s cubic-bezier(.2,.9,.2,1);padding:18px 18px max(20px,env(safe-area-inset-bottom))}
+.modal.on{transform:none}
+@media(min-width:720px){.modal{left:50%;right:auto;width:560px;top:50%;bottom:auto;border-radius:22px;transform:translate(-50%,-46%);opacity:0;pointer-events:none;transition:all .3s}.modal.on{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}}
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.mh h3{font-size:26px}
+.photos{display:flex;gap:8px;flex-wrap:wrap}
+.ph{width:80px;height:80px;border-radius:12px;overflow:hidden;position:relative;background:var(--parch);cursor:grab}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph button{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:rgba(63,49,41,.8);color:#fff;font-size:14px;line-height:24px}
+.ph em{position:absolute;left:4px;bottom:4px;background:var(--brand);color:#fff;font:500 10px/1 'Jost';font-style:normal;padding:4px 5px;border-radius:5px}
+.addph{width:80px;height:80px;border-radius:12px;border:1.5px dashed var(--brand);color:var(--brand);display:grid;place-items:center;text-align:center;font-size:12px;line-height:1.2}
+.sw{display:flex;align-items:center;justify-content:space-between;margin-top:14px;font-weight:500}
+.sw input{width:48px;height:28px;appearance:none;background:#d6c9b5;border-radius:14px;position:relative;transition:background .2s;cursor:pointer;flex:none}
+.sw input:after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .2s}
+.sw input:checked{background:var(--ok)}
+.sw input:checked:after{transform:translateX(20px)}
+.toast{position:fixed;left:50%;bottom:24px;z-index:80;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fbf6f2;padding:12px 18px;border-radius:999px;font-size:14px;transition:all .3s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section class="login" id="login">
+  <form class="lcard" id="lform" autocomplete="off">
+    <img src="img/logo.png" alt="Karma Candles">
+    <h1>Panel de administración</h1>
+    <p>Entra para agregar, cambiar o quitar velas del catálogo.</p>
+    <div class="pw">
+      <input id="pass" type="password" placeholder="Contraseña" autocomplete="current-password" aria-label="Contraseña">
+      <button type="button" id="eye" aria-label="Mostrar contraseña"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+    </div>
+    <button class="btn full" type="submit">Entrar</button>
+    <div class="err" id="err"></div>
+  </form>
+</section>
+
+<!-- PANEL -->
+<div id="panel" hidden>
+  <header class="top">
+    <img src="img/logo.png" alt="">
+    <div class="t"><b>Administración</b><span>Karma Candles</span></div>
+    <a href="./" target="_blank" rel="noopener">Ver catálogo</a>
+    <button id="out">Salir</button>
+  </header>
+  <div class="wrap">
+    <div class="tabs"><button class="on" data-tab="velas">Velas</button><button data-tab="ajustes">Ajustes</button></div>
+
+    <section id="tab-velas">
+      <div class="stats">
+        <div class="stat"><b id="sTotal">0</b><span>Velas</span></div>
+        <div class="stat"><b id="sAvail">0</b><span>Disponibles</span></div>
+        <div class="stat"><b id="sCats">0</b><span>Categorías</span></div>
+      </div>
+      <div class="bar"><h2>Mis velas</h2><button class="btn" id="add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Agregar vela</button></div>
+      <p class="hint">Arrastra desde ⋮⋮ para cambiar el orden en el catálogo.</p>
+      <div class="list" id="list"></div>
+    </section>
+
+    <section id="tab-ajustes" hidden>
+      <div class="card">
+        <label class="field"><span>Nombre de la marca</span><input id="sName"></label>
+        <label class="field"><span>WhatsApp donde llegan los pedidos (10 dígitos)</span><input id="sWa" inputmode="tel" placeholder="Ej. 2221234567"></label>
+        <p class="small">Si lo dejas vacío, el cliente elige a quién mandar el pedido.</p>
+        <label class="field"><span>Título de portada (usa / para la segunda línea)</span><input id="sTitle"></label>
+        <label class="field"><span>Texto de portada</span><input id="sSub"></label>
+        <button class="btn full" id="sSave">Guardar ajustes</button>
+        <div class="sep"></div>
+        <div class="two"><button class="btn ghost" id="exp">Descargar respaldo</button><button class="btn ghost" id="imp">Cargar respaldo</button></div>
+        <input type="file" id="impFile" accept="application/json" hidden>
+        <p class="small">El respaldo guarda todas tus velas y fotos en un archivo, por si cambias de celular.</p>
+        <button class="danger" id="reset">Volver al catálogo de ejemplo</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="mh"><h3 id="mTitle">Nueva vela</h3><button class="ib" id="mClose" aria-label="Cerrar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="field"><span>Fotos · la primera es la portada (arrástralas para ordenar)</span><div class="photos" id="photos"></div></div>
+  <input type="file" id="file" accept="image/*" multiple hidden>
+  <label class="field"><span>Nombre</span><input id="fName" placeholder="Ej. Oráculo II"></label>
+  <label class="field"><span>Frase corta</span><input id="fPhrase" placeholder="Ej. Algunas respuestas llegan con el tiempo."></label>
+  <div class="two">
+    <label class="field"><span>Precio (MXN)</span><input id="fPrice" type="number" inputmode="decimal" min="0" placeholder="Vacío = a consultar"></label>
+    <label class="field"><span>Categoría</span><input id="fCat" list="cats" placeholder="Ej. Colección Mística"></label>
+  </div>
+  <datalist id="cats"></datalist>
+  <label class="field"><span>Etiqueta (opcional)</span><input id="fTag" placeholder="Ej. Nuevo, Temporada"></label>
+  <label class="field"><span>Descripción</span><textarea id="fDesc" rows="3" placeholder="Aroma, tamaño, piedras, duración…"></textarea></label>
+  <label class="sw">Disponible<input type="checkbox" id="fAvail" checked></label>
+  <button class="btn full" id="fSave">Guardar vela</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="store.js"></script>
+<script>
+// La contraseña no se guarda tal cual: solo su huella SHA-256.
+const PASS_HASH='45da74e0f6308bd2045096761cfce0c5c518a7cfd46b2a6fdd89b43fbb123942';
+const SESSION='karma-admin-ok';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money=n=>'$'+Number(n).toLocaleString('es-MX',{maximumFractionDigits:2});
+let DB, editing=null, draft=[];
+
+async function sha256(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+const isIn=()=>{try{return sessionStorage.getItem(SESSION)==='1'}catch(e){return false}};
+$('#eye').onclick=()=>{const i=$('#pass');i.type=i.type==='password'?'text':'password'};
+$('#lform').onsubmit=async e=>{e.preventDefault();const ok=(await sha256($('#pass').value))===PASS_HASH;
+  if(!ok){$('#err').textContent='Contraseña incorrecta';const c=$('.lcard');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');return}
+  try{sessionStorage.setItem(SESSION,'1')}catch(e){} enter()};
+$('#out').onclick=()=>{try{sessionStorage.removeItem(SESSION)}catch(e){} location.reload()};
+
+async function enter(){DB=(await idb.get(KEY))||structuredClone(DEFAULT);$('#login').hidden=true;$('#panel').hidden=false;render();fillSettings()}
+const save=()=>idb.set(KEY,DB);
+
+function render(){
+  const P=DB.products, cats=[...new Set(P.map(p=>p.cat).filter(Boolean))];
+  $('#sTotal').textContent=P.length;$('#sAvail').textContent=P.filter(p=>p.avail).length;$('#sCats').textContent=cats.length;
+  $('#cats').innerHTML=cats.map(c=>`<option value="${esc(c)}">`).join('');
+  $('#list').innerHTML=P.length?P.map(p=>`<div class="row${p.avail?'':' off'}" data-id="${p.id}">
+    <span class="h" aria-label="Mover"><svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><circle cx="9" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg></span>
+    <img src="${esc(p.photos[0]||'img/logo.png')}" alt="">
+    <div class="i"><b>${esc(p.name)}</b><small>${esc(p.cat||'Sin categoría')}${p.tag?`<span class="pill">${esc(p.tag)}</span>`:''}${p.avail?'':'<span class="pill">Agotada</span>'}</small></div>
+    <span class="p">${p.price==null?'A consultar':money(p.price)}</span>
+    <div class="a"><button class="ib" data-edit="${p.id}" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/></svg></button><button class="ib del" data-del="${p.id}" aria-label="Borrar"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div>
+  </div>`).join(''):'<div class="empty">Todavía no hay velas. Toca "Agregar vela" para empezar.</div>';
+}
+if(window.Sortable)Sortable.create($('#list'),{handle:'.h',animation:200,onEnd(){const ids=[...document.querySelectorAll('#list .row')].map(r=>r.dataset.id);const by=Object.fromEntries(DB.products.map(p=>[p.id,p]));DB.products=ids.map(i=>by[i]);save();toast('Orden guardado')}});
+
+$('#list').onclick=e=>{const ed=e.target.closest('[data-edit]');if(ed)return openModal(ed.dataset.edit);
+  const dl=e.target.closest('[data-del]');if(dl){const p=DB.products.find(x=>x.id===dl.dataset.del);if(confirm(`¿Borrar "${p.name}" del catálogo?`)){DB.products=DB.products.filter(x=>x!==p);save();render();toast('Vela borrada')}}};
+$('#add').onclick=()=>openModal(null);
+
+function openModal(id){editing=id?DB.products.find(p=>p.id===id):null;const p=editing||{name:'',phrase:'',desc:'',price:null,cat:'',tag:'',avail:true,photos:[]};
+  $('#mTitle').textContent=editing?'Editar vela':'Nueva vela';$('#fName').value=p.name;$('#fPhrase').value=p.phrase;$('#fDesc').value=p.desc;
+  $('#fPrice').value=p.price??'';$('#fCat').value=p.cat;$('#fTag').value=p.tag;$('#fAvail').checked=p.avail;draft=[...p.photos];renderPhotos();
+  $('#modal').classList.add('on');$('#scrim').classList.add('on')}
+function closeModal(){$('#modal').classList.remove('on');$('#scrim').classList.remove('on')}
+$('#mClose').onclick=$('#scrim').onclick=closeModal;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+let phSort;function renderPhotos(){$('#photos').innerHTML=draft.map((s,i)=>`<div class="ph"><img src="${esc(s)}" alt="">${i?'':'<em>Portada</em>'}<button data-rm="${i}" aria-label="Quitar foto">×</button></div>`).join('')+'<button class="addph" id="addPh">＋<br>Agregar<br>fotos</button>';
+  phSort&&phSort.destroy();if(window.Sortable)phSort=Sortable.create($('#photos'),{draggable:'.ph',animation:160,onEnd(e){const [m]=draft.splice(e.oldIndex,1);draft.splice(e.newIndex,0,m);renderPhotos()}})}
+$('#photos').onclick=e=>{const rm=e.target.closest('[data-rm]');if(rm){draft.splice(+rm.dataset.rm,1);return renderPhotos()}if(e.target.closest('#addPh'))$('#file').click()};
+function shrink(f){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const M=1000,sc=Math.min(1,M/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.84))};im.onerror=()=>res(null);im.src=r.result};r.readAsDataURL(f)})}
+$('#file').onchange=async e=>{for(const f of e.target.files){const d=await shrink(f);d&&draft.push(d)}e.target.value='';renderPhotos()};
+$('#fSave').onclick=()=>{const name=$('#fName').value.trim();if(!name)return toast('Ponle nombre a la vela');if(!draft.length&&!confirm('La vela no tiene fotos. ¿Guardarla así?'))return;
+  const pr=$('#fPrice').value.trim();const d={name,phrase:$('#fPhrase').value.trim(),desc:$('#fDesc').value.trim(),price:pr===''?null:Math.max(0,+pr),cat:$('#fCat').value.trim(),tag:$('#fTag').value.trim(),avail:$('#fAvail').checked,photos:draft};
+  if(editing)Object.assign(editing,d);else DB.products.unshift({id:'p'+Date.now().toString(36),...d});
+  save();closeModal();render();toast(editing?'Cambios guardados':'Vela agregada')};
+
+document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('[data-tab]');if(!b)return;document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));$('#tab-velas').hidden=b.dataset.tab!=='velas';$('#tab-ajustes').hidden=b.dataset.tab!=='ajustes'};
+function fillSettings(){const s=DB.settings;$('#sName').value=s.name;$('#sWa').value=s.wa;$('#sTitle').value=s.title.replace(/<br>/g,' / ').replace(/<\/?em>/g,'');$('#sSub').value=s.sub}
+$('#sSave').onclick=()=>{const t=$('#sTitle').value.trim(),parts=t.split(' / ');DB.settings={name:$('#sName').value.trim()||'Karma Candles',wa:$('#sWa').value.trim(),title:parts.length>1?esc(parts[0])+'<br><em>'+esc(parts.slice(1).join(' '))+'</em>':esc(t),sub:$('#sSub').value.trim()};save();toast('Ajustes guardados')};
+$('#exp').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(DB)],{type:'application/json'}));a.download='karma-catalogo-respaldo.json';a.click()};
+$('#imp').onclick=()=>$('#impFile').click();
+$('#impFile').onchange=async e=>{try{const d=JSON.parse(await e.target.files[0].text());if(!d.products)throw 0;DB=d;save();render();fillSettings();toast('Respaldo cargado')}catch(err){toast('Ese archivo no es un respaldo')}e.target.value=''};
+$('#reset').onclick=()=>{if(!confirm('¿Volver al catálogo de ejemplo? Se borran tus cambios.'))return;DB=structuredClone(DEFAULT);save();render();fillSettings();toast('Catálogo de ejemplo')};
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),1800)}
+
+if(isIn())enter();else $('#pass').focus();
+</script>
+</body>
+</html>

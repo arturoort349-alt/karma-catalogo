@@ -243,7 +243,7 @@ body.editing footer .flink{display:none}
   <div class="grid" id="grid"></div>
 </main>
 
-<footer><img src="img/logo.png" alt="" style="width:150px;margin:0 auto 8px"><b id="fName" style="display:none">Karma Candles</b>Velas y talleres · Puebla<br><button id="editBtn" class="flink">Editar catálogo</button></footer>
+<footer><img src="img/logo.png" alt="" style="width:150px;margin:0 auto 8px"><b id="fName" style="display:none">Karma Candles</b>Velas y talleres · Puebla</footer>
 
 
 <a class="wab" id="wab" href="#" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></a>
@@ -324,26 +324,17 @@ body.editing footer .flink{display:none}
 
 <div class="toast" id="toast"></div>
 
+<script src="store.js"></script>
 <script>
-const DEFAULT={
-  settings:{name:'Karma Candles',wa:'',title:'Velas hechas a mano,<br><em>con intención</em>',sub:'Elige tus velas, arma tu pedido y nos llega directo por WhatsApp.'},
-  products:[
-    {id:'p1',name:'Oráculo II',phrase:'Algunas respuestas llegan con el tiempo.',desc:'Vela en lata negra con calaveritas de cera.\nEnciende. Espera. Hay un mensaje esperando por ti.',price:280,cat:'Colección Mística',tag:'Nuevo',avail:true,photos:['img/oraculo_0.jpg','img/oraculo_1.jpg','img/oraculo_2.jpg','img/oraculo_3.jpg']},
-    {id:'p2',name:'Metamorfosis I · Verde',phrase:'Hay fuegos que no consumen. Transforman.',desc:'Vela verde con calavera y flor negra de cera, cuarzos y mecha de madera.\nEnciende, observa, deja que suceda.',price:320,cat:'Colección Mística',tag:'',avail:true,photos:['img/meta_verde_0.jpg','img/meta_verde_1.jpg','img/meta_verde_2.jpg','img/meta_verde_3.jpg']},
-    {id:'p3',name:'Metamorfosis I · Lila',phrase:'Hay fuegos que no consumen. Transforman.',desc:'Vela lila de doble mecha con calavera y flor negra de cera y amatistas.\nEnciende, observa, deja que suceda.',price:350,cat:'Colección Mística',tag:'',avail:true,photos:['img/meta_lila_0.jpg','img/meta_lila_1.jpg','img/meta_lila_2.jpg','img/meta_lila_3.jpg']},
-    {id:'p4',name:'Cempasúchil',phrase:'Para iluminar el camino de los que regresan.',desc:'Flor de cempasúchil de cera en vaso de vidrio, con listón de cuadros y moño.',price:250,cat:'Día de Muertos',tag:'Temporada',avail:true,photos:['img/cempasuchil_0.jpg','img/cempasuchil_1.jpg','img/cempasuchil_2.jpg','img/cempasuchil_3.jpg']}
-  ]
-};
-const KEY='karma-catalogo-v1';
+
+
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const money=n=>'$'+Number(n).toLocaleString('es-MX',{maximumFractionDigits:2});
 let DB, cart={}, cat='Todas', query='', current=null, qty=1, editing=null, draftPhotos=[];
 
 /* ---------- storage (IndexedDB, fotos incluidas) ---------- */
-const idb=(()=>{let p;function open(){return p||(p=new Promise((res,rej)=>{const r=indexedDB.open('karma',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}))}
- return{async get(k){try{const d=await open();return await new Promise(r=>{const q=d.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>r(q.result);q.onerror=()=>r(null)})}catch(e){return null}},
-        async set(k,v){try{const d=await open();await new Promise(r=>{const t=d.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=r;t.onerror=r})}catch(e){}}}})();
+
 async function load(){const d=await idb.get(KEY);DB=d&&d.products?d:structuredClone(DEFAULT);try{cart=JSON.parse(localStorage.getItem(KEY+'-cart')||'{}')}catch(e){cart={}}}
 const save=()=>idb.set(KEY,DB);
 const saveCart=()=>{try{localStorage.setItem(KEY+'-cart',JSON.stringify(cart))}catch(e){}};
@@ -473,7 +464,7 @@ $('#cartBtn').onclick=$('#fab').onclick=()=>{updateCart();show('#cSheet')};
 $('#sendWa').onclick=sendWa;
 $('#cDel').onclick=e=>{const b=e.target.closest('button');if(!b)return;$('#cDel .on').classList.remove('on');b.classList.add('on')};
 $('#q').oninput=e=>{query=e.target.value;renderGrid()};
-$('#editBtn').onclick=()=>{setEditing(true);toast('Modo editar activado');window.scrollTo({top:$('main').offsetTop-120,behavior:'smooth'})};
+$('#editBtn')&&($('#editBtn').onclick=()=>{setEditing(true);toast('Modo editar activado');window.scrollTo({top:$('main').offsetTop-120,behavior:'smooth'})});
 $('#doneBtn').onclick=()=>{setEditing(false);toast('Listo, así lo ven tus clientes')};
 $('#setBtn').onclick=openSettings;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
